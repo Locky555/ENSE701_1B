@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Basic Review System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    .star-rating {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+      cursor: pointer;
+    }
+
+    .star {
+      font-size: 2rem;
+      color: lightgray;
+      transition: color 0.2s;
+    }
+
+    .star.selected,
+    .star.hovered {
+      color: gold;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      margin-top: 10px;
+      font-size: 1rem;
+      padding: 10px;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px 15px;
+      font-size: 1rem;
+    }
+
+    .review {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-top: 15px;
+    }
+
+    .review .stars {
+      color: gold;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Leave a Review</h2>
+
+  <div class="star-rating" id="starRating">
+    <span class="star" data-value="5">&#9733;</span>
+    <span class="star" data-value="4">&#9733;</span>
+    <span class="star" data-value="3">&#9733;</span>
+    <span class="star" data-value="2">&#9733;</span>
+    <span class="star" data-value="1">&#9733;</span>
+  </div>
+
+  <textarea id="comment" placeholder="Write your review here..."></textarea>
+  <br>
+  <button onclick="submitReview()">Submit</button>
+
+  <h3>Reviews</h3>
+  <div id="reviewsContainer"></div>
+
+  <script>
+    let selectedRating = 0;
+
+    const stars = document.querySelectorAll('.star');
+    const reviewsContainer = document.getElementById('reviewsContainer');
+
+    stars.forEach(star => {
+      star.addEventListener('click', () => {
+        selectedRating = parseInt(star.getAttribute('data-value'));
+        updateStarDisplay();
+      });
+
+      star.addEventListener('mouseover', () => {
+        const hoverValue = parseInt(star.getAttribute('data-value'));
+        stars.forEach(s => {
+          s.classList.toggle('hovered', parseInt(s.getAttribute('data-value')) <= hoverValue);
+        });
+      });
+
+      star.addEventListener('mouseout', () => {
+        stars.forEach(s => s.classList.remove('hovered'));
+      });
+    });
+
+    function updateStarDisplay() {
+      stars.forEach(star => {
+        star.classList.toggle('selected', parseInt(star.getAttribute('data-value')) <= selectedRating);
+      });
+    }
+
+    function submitReview() {
+      const comment = document.getElementById('comment').value.trim();
+      if (selectedRating === 0 || comment === '') {
+        alert('Please select a rating and enter a comment.');
+        return;
+      }
+
+      const reviewDiv = document.createElement('div');
+      reviewDiv.classList.add('review');
+
+      const starSpan = document.createElement('div');
+      starSpan.classList.add('stars');
+      starSpan.innerHTML = '★'.repeat(selectedRating) + '☆'.repeat(5 - selectedRating);
+
+      const commentP = document.createElement('p');
+      commentP.textContent = comment;
+
+      reviewDiv.appendChild(starSpan);
+      reviewDiv.appendChild(commentP);
+      reviewsContainer.appendChild(reviewDiv);
+
+      // Clear input
+      document.getElementById('comment').value = '';
+      selectedRating = 0;
+      updateStarDisplay();
+    }
+  </script>
+
+</body>
+</html>
