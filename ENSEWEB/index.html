@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SPEED - Search Evidence</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <header>
+    <h1>Software Practice Empirical Evidence Database (SPEED)</h1>
+    <nav>
+      <a href="index.html">Search</a>
+      <a href="submit.html">Submit Article</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="search-section">
+      <h2>Search Evidence</h2>
+      <input type="text" placeholder="Search SE practice or claim..." class="search-bar"/>
+
+      <div class="filters">
+        <select>
+          <option>Select SE Practice</option>
+             <option>Agile Development</option>
+          <option>Behavior-Driven Development (BDD)</option>
+          <option>Code Reviews</option>
+          <option>Continuous Integration (CI)</option>
+          <option>Continuous Deployment (CD)</option>
+          <option>Design Patterns</option>
+          <option>Domain-Driven Design (DDD)</option>
+          <option>Extreme Programming (XP)</option>
+          <option>Mob Programming</option>
+          <option>Model-Driven Development (MDD)</option>
+          <option>Pair Programming</option>
+          <option>Refactoring</option>
+          <option>Requirements Engineering</option>
+          <option>Software Metrics</option>
+          <option>Software Testing</option>
+          <option>Static Code Analysis</option>
+          <option>Test Automation</option>
+          <option>Test-Driven Development (TDD)</option>
+          <option>User-Centered Design (UCD)</option>
+          <option>Version Control (e.g., Git)</option>
+        </select>
+
+        <select>
+          <option>Select Claim</option>
+          <option>Improves Code Quality</option>
+          <option>Reduces Bugs</option>
+          <option>Speeds up Development</option>
+        </select>
+
+        <select>
+          <option>Select Year Range</option>
+          <option>2020–2025</option>
+          <option>2015–2020</option>
+          <option>Before 2015</option>
+        </select>
+
+        <button>Search</button>
+      </div>
+
+      <div class="results">
+        <h3>Example Results</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Authors</th>
+              <th>Year</th>
+              <th>SE Practice</th>
+              <th>Claim</th>
+              <th>Evidence</th>
+              <th>Type</th>
+              <th>Participants</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>TDD in Real Projects</td>
+              <td>Smith et al.</td>
+              <td>2021</td>
+              <td>TDD</td>
+              <td>Improves Code Quality</td>
+              <td>Agree</td>
+              <td>Experiment</td>
+              <td>Practitioners</td>
+            </tr>
+            <tr>
+              <td>Assessing Pair Programming</td>
+              <td>Lee & Kumar</td>
+              <td>2018</td>
+              <td>Pair Programming</td>
+              <td>Reduces Bugs</td>
+              <td>Disagree</td>
+              <td>Case Study</td>
+              <td>Students</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
