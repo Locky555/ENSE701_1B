@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SPEED Article Search</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>SPEED Article Search</h1>
+    <nav><a href="submit.html">Submit a New Article</a></nav>
+  </header>
+
+  <main>
+  <div class="search-section">
+    <input type="text" id="searchInput" class="search-bar" placeholder="Search by keywords (e.g., author, practice, claim)">
+    <button onclick="fetchArticles()">Search</button>
+
+    <h2>All Articles</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Authors</th>
+          <th>Year</th>
+          <th>Practice</th>
+          <th>Claim</th>
+          <th>Evidence</th>
+          <th>Type</th>
+          <th>Participants</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</main>
+
+
+  <script>
+  async function fetchArticles() {
+    const searchInput = document.getElementById('searchInput').value.trim();
+    const response = await fetch(`http://localhost:3000/api/articles?search=${encodeURIComponent(searchInput)}`);
+    const articles = await response.json();
+
+    const tbody = document.querySelector('tbody');
+    tbody.innerHTML = '';
+
+    articles.forEach(article => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${article.title}</td>
+        <td>${article.authors}</td>
+        <td>${article.year}</td>
+        <td>${article.sePractice}</td>
+        <td>${article.claim}</td>
+        <td>${article.evidence}</td>
+        <td>${article.type}</td>
+        <td>${article.participants}</td>
+      `;
+      tbody.appendChild(row);
+    });
+  }
+
+  window.onload = fetchArticles;
+</script>
+
+</body>
+</html>
