@@ -15,6 +15,26 @@
   <main>
   <div class="search-section">
     <input type="text" id="searchInput" class="search-bar" placeholder="Search by keywords (e.g., author, practice, claim)">
+    <select id="practiceFilter">
+
+   <option value="">All SE Practices</option>
+    <option value="Test-Driven Development">Test-Driven Development</option>
+    <option value="Code Reviews">Code Reviews</option>
+    <option value="Pair Programming">Pair Programming</option>
+    <option value="Agile">Agile</option>
+    <option value="Continuous Integration">Continuous Intergration</option>
+    <option value="Continuous Deployment">Continuous Deployment</option>
+    <option value="Version Control">Version Control</option>
+    <option value="Defensive Programming">Defensive Programming</option>
+    <option value="Refactoring">Refactoring</option>
+    <option value="Behaviour Driven Development">Behaviour Driven Development</option>
+    <option value="Version Control">Version control</option>
+
+
+
+
+</select>
+
     <button onclick="fetchArticles()">Search</button>
 
     <h2>All Articles</h2>
@@ -39,28 +59,35 @@
 
   <script>
   async function fetchArticles() {
-    const searchInput = document.getElementById('searchInput').value.trim();
-    const response = await fetch(`http://localhost:3000/api/articles?search=${encodeURIComponent(searchInput)}`);
-    const articles = await response.json();
+  const searchInput = document.getElementById('searchInput').value.trim();
+  const practiceFilter = document.getElementById('practiceFilter').value;
 
-    const tbody = document.querySelector('tbody');
-    tbody.innerHTML = '';
+  const queryParams = new URLSearchParams();
+  if (searchInput) queryParams.append('search', searchInput);
+  if (practiceFilter) queryParams.append('sePractice', practiceFilter);
 
-    articles.forEach(article => {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${article.title}</td>
-        <td>${article.authors}</td>
-        <td>${article.year}</td>
-        <td>${article.sePractice}</td>
-        <td>${article.claim}</td>
-        <td>${article.evidence}</td>
-        <td>${article.type}</td>
-        <td>${article.participants}</td>
-      `;
-      tbody.appendChild(row);
-    });
-  }
+  const response = await fetch(`http://localhost:3000/api/articles?${queryParams.toString()}`);
+  const articles = await response.json();
+
+  const tbody = document.querySelector('tbody');
+  tbody.innerHTML = '';
+
+  articles.forEach(article => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${article.title}</td>
+      <td>${article.authors}</td>
+      <td>${article.year}</td>
+      <td>${article.sePractice}</td>
+      <td>${article.claim}</td>
+      <td>${article.evidence}</td>
+      <td>${article.type}</td>
+      <td>${article.participants}</td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
 
   window.onload = fetchArticles;
 </script>

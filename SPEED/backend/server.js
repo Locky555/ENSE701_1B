@@ -44,16 +44,38 @@ app.get('/submit.html', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'frontend', 'submit.html'));
 });
 
-// API route to fetch articles
 app.get('/api/articles', async (req, res) => {
   try {
-    const articles = await Article.find();
+    const { search, sePractice } = req.query;
+
+    let query = {};
+
+    // If search text is provided
+    if (search) {
+      const searchRegex = new RegExp(search, 'i');
+      query.$or = [
+        { title: searchRegex },
+        { authors: searchRegex },
+        { sePractice: searchRegex },
+        { claim: searchRegex },
+        { evidence: searchRegex },
+      ];
+    }
+
+    // If SE practice filter is selected
+    if (sePractice) {
+      query.sePractice = sePractice;
+    }
+
+    const articles = await Article.find(query);
     res.json(articles);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Failed to fetch articles' });
   }
 });
+
+
 
 // Start server
 app.listen(PORT, () => {
