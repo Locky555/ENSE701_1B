@@ -119,6 +119,16 @@ app.post('/api/articles/:id/review', async (req, res) => {
   }
 });
 
+app.get('/api/articles/:id/reviews', async (req, res) => {
+  try {
+    const reviews = await Review.find({ articleId: req.params.id }).sort({ createdAt: -1 });
+    res.json(reviews);
+  } catch (err) {
+    console.error('Error in getting reviews:', err);
+    res.status(500).json({ error: 'Failed to get any reviews (no reviews available)' });
+  }
+});
+
 
 // Start server
 app.listen(PORT, () => {

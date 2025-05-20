@@ -13,6 +13,9 @@
     <label>Rating (1–5): <input type="number" id="rating" min="1" max="5" required /></label><br>
     <label>Review:<br><textarea id="comment" required></textarea></label><br>
     <button type="submit">Submit Review</button>
+    <h2>Reviews</h2>
+    <div id="reviewList"></div>
+
   </form>
 
   <script>
@@ -45,7 +48,37 @@
       }
     });
 
+
+async function loadReviews() {
+    const res = await fetch(`http://localhost:3000/api/articles/${articleId}/reviews`);
+    const reviews = await res.json();
+
+    const reviewList = document.getElementById('reviewList');
+    reviewList.innerHTML = '';
+
+    if (reviews.length === 0) {
+      reviewList.innerHTML = '<p>This article has not been reviewed yet!</p>';
+      return;
+    }
+
+    reviews.forEach(review => {
+      const div = document.createElement('div');
+      div.className = 'review';
+      div.innerHTML = `
+        <strong>${review.name}</strong> 
+        <span>(${new Date(review.createdAt).toLocaleDateString()})</span><br>
+        ⭐ Rating: ${review.rating}/5<br>
+        <p>${review.comment}</p>
+        <hr>
+      `;
+      reviewList.appendChild(div);
+    });
+  }
+
+  window.onload = loadReviews;
+
     loadArticle();
+    loadReviews();
   </script>
 </body>
 </html>

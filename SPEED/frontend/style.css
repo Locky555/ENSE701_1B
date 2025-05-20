@@ -87,3 +87,10 @@ button {
 button:hover {
   background-color: #cc3a00;
 }
+
+.review {
+  background-color: #cac5c5;
+  border-radius: 7px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
