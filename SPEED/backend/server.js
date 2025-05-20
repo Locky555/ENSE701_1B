@@ -75,6 +75,49 @@ app.get('/api/articles', async (req, res) => {
   }
 });
 
+const ReviewSchema = new mongoose.Schema({
+  articleId: { type: mongoose.Schema.Types.ObjectId, ref: 'Article', required: true },
+  name: { type: String, required: true },
+  rating: { type: Number, required: true },
+  comment: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now },
+});
+const Review = mongoose.model('Review', ReviewSchema, 'Article_Reviews');
+
+app.get('/api/articles/:id', async (req, res) => {
+  try {
+    const article = await Article.findById(req.params.id);
+    if (!article) return res.status(404).json({ error: 'Article not found' });
+    res.json(article);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+app.post('/api/articles/:id/review', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, rating, comment } = req.body;
+
+    if (!name || !rating || !comment) {
+      return res.status(400).json({ error: 'All fields required' });
+    }
+
+    const review = new Review({
+      articleId: id,
+      name,
+      rating,
+      comment,
+    });
+
+    await review.save();
+    res.status(201).json({ message: 'Review saved successfully' });
+  } catch (err) {
+    console.error('Error saving review:', err);
+    res.status(500).json({ error: 'Failed to save review' });
+  }
+});
 
 
 // Start server

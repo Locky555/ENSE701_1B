@@ -75,7 +75,7 @@
   articles.forEach(article => {
     const row = document.createElement('tr');
     row.innerHTML = `
-      <td>${article.title}</td>
+      <td><a href="article.html?id=${article._id}">${article.title}</a></td>
       <td>${article.authors}</td>
       <td>${article.year}</td>
       <td>${article.sePractice}</td>
@@ -87,6 +87,30 @@
     tbody.appendChild(row);
   });
 }
+
+app.post('/api/articles/:id/review', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, rating, comment } = req.body;
+
+    if (!name || !rating || !comment) {
+      return res.status(400).json({ error: 'All fields required' });
+    }
+
+    const review = new Review({
+      articleId: id,
+      name,
+      rating,
+      comment,
+    });
+
+    await review.save();
+    res.status(201).json({ message: 'Review saved' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error saving review' });
+  }
+});
 
 
   window.onload = fetchArticles;
