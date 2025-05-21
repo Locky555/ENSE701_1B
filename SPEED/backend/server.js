@@ -129,6 +129,41 @@ app.get('/api/articles/:id/reviews', async (req, res) => {
   }
 });
 
+const ArticleSuggestionSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  authors: { type: String, required: true },
+  journal: { type: String, required: true },
+  year: { type: Number, required: true },
+  doi: { type: String, required: true },
+  description: { type: String, required: true},
+  submitted: { type: Date, default: Date.now}
+});
+const ArticleSuggestion = mongoose.model('ArticleSuggestion', ArticleSuggestionSchema, 'Article_Suggestions');
+
+app.post('/api/suggestions', async (req, res) => {
+  try {
+    const { title, authors, journal, year, doi, description } = req.body;
+
+    if (!title || !authors || !description) {
+      return res.status(400).json({ message: 'Please make sure title, year and a small description is filled in.' });
+    }
+    const suggestion = new ArticleSuggestion({
+      title,
+      authors,
+      journal,
+      year,
+      doi,
+      description
+    });
+
+    await suggestion.save();
+    res.status(201).json({ message: 'Thank you for your article suggestion.' });
+  } catch (err) {
+    console.error('Error saving suggestion:', err);
+    res.status(500).json({ message: 'Sorry, failed to submit suggestion' });
+  }
+});
+
 
 // Start server
 app.listen(PORT, () => {

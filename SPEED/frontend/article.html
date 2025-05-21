@@ -67,7 +67,7 @@ async function loadReviews() {
       div.innerHTML = `
         <strong>${review.name}</strong> 
         <span>(${new Date(review.createdAt).toLocaleDateString()})</span><br>
-        ⭐ Rating: ${review.rating}/5<br>
+        Star Rating: ${review.rating}/5<br>
         <p>${review.comment}</p>
         <hr>
       `;

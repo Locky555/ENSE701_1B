@@ -39,11 +39,40 @@
   </main>
 
   <script>
-    document.getElementById('articleForm').addEventListener('submit', function(e) {
+    document.getElementById('articleForm').addEventListener('submit', async function(e) {
       e.preventDefault();
-      document.getElementById('status').textContent = "Thank you! Your article has been submitted for moderation.";
-      this.reset();
-    });
-  </script>
+
+
+      const articleData = {
+        title: document.getElementById('title').value,
+        authors: document.getElementById('authors').value,
+        journal: document.getElementById('journal').value,
+        year: document.getElementById('year').value,
+        doi: document.getElementById('doi').value,
+        description: document.getElementById('description').value,
+    };
+
+  try {
+      const res = await fetch('http://localhost:3000/api/suggestions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(articleData)
+      });
+
+      if (res.ok) {
+        document.getElementById('status').textContent = "Thank you! Your article has been submitted for moderation.";
+        this.reset();
+      } else {
+        const error = await res.json();
+        document.getElementById('status').textContent = `Error: ${error.message || 'Submission failed'}`;
+      }
+    } catch (err) {
+      console.error(err);
+      document.getElementById('status').textContent = "An error occurred. Please try again later.";
+    }
+  });
+</script>
 </body>
 </html>
